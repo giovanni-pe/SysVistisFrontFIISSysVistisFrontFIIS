@@ -1,17 +1,29 @@
 <template>
-  <div class="max-w-6xl mx-auto py-8">
-    <div class="border-b border-gray-200 mb-6">
+  <div class="container-unas py-8">
+    <div class="border-b border-slate-200 mb-6">
       <nav class="flex gap-4" aria-label="Historial Navegación">
         <button
-          class="py-2 px-4 -mb-px border-b-2 transition font-semibold"
-          :class="currentTab === 'completed' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-blue-500'"
+          class="py-2 px-4 -mb-px border-b-2 transition font-semibold flex items-center gap-2 focus-visible:outline-none"
+          :class="currentTab === 'completed'
+            ? 'border-blue-600 text-blue-600'
+            : 'border-transparent text-muted hover:text-blue-600 hover:border-blue-200'"
           @click="currentTab = 'completed'"
-        >Visitas Completadas</button>
+          :aria-current="currentTab === 'completed' ? 'page' : false"
+        >
+          <Icon icon="mdi:check-decagram-outline" width="22" aria-hidden="true" />
+          Visitas Completadas
+        </button>
         <button
-          class="py-2 px-4 -mb-px border-b-2 transition font-semibold"
-          :class="currentTab === 'attendance' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-blue-500'"
+          class="py-2 px-4 -mb-px border-b-2 transition font-semibold flex items-center gap-2 focus-visible:outline-none"
+          :class="currentTab === 'attendance'
+            ? 'border-blue-600 text-blue-600'
+            : 'border-transparent text-muted hover:text-blue-600 hover:border-blue-200'"
           @click="currentTab = 'attendance'"
-        >Asistencias</button>
+          :aria-current="currentTab === 'attendance' ? 'page' : false"
+        >
+          <Icon icon="mdi:account-check-outline" width="22" aria-hidden="true" />
+          Asistencias
+        </button>
       </nav>
     </div>
     <div>
@@ -25,11 +37,11 @@
 import { defineComponent, ref } from 'vue';
 import CompletedVisitPage from '../../CompletedVisit/pages/CompletedVisitPage.vue';
 import AttendancePage from '../../Attendances/Pages/AttendancePage.vue';
+import { Icon } from '@iconify/vue';
 
 export default defineComponent({
-  components: { CompletedVisitPage, AttendancePage },
+  components: { CompletedVisitPage, AttendancePage, Icon },
   setup() {
-    // Puedes cambiar a useState o reactive si prefieres evitar ref por completo, pero data() también es válido aquí
     const currentTab = ref<'completed' | 'attendance'>('completed');
     return { currentTab };
   }

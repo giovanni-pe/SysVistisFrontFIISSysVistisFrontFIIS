@@ -11,6 +11,7 @@ import AttendancePage from '../modules/Attendances/Pages/AttendancePage.vue'
 import CompletedVisitPage from '../modules/CompletedVisit/pages/CompletedVisitPage.vue'
 import CertificatePage from '../modules/Certificate/Pages/CertificatePage.vue'
 import HistoricPage from '../modules/Historic/Pages/HistoricPage.vue'
+import LandingPageReservas from '../modules/VisitRequest/Pages/LandingPageReservas.vue'
 
 
 
@@ -88,6 +89,11 @@ const routes= [
     name: 'Register',
     component: RegisterPage
   },
+  {
+    path: '/landing',
+    name: 'landing',
+    component: LandingPageReservas
+  }
 
 //   {
 //     path: '/:catchAll(.*)',

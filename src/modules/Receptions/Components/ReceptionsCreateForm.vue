@@ -1,28 +1,85 @@
 <template>
-  <div v-if="store.showCreate" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-    <form @submit.prevent="onSubmit" class="bg-white p-6 rounded shadow-md w-full max-w-md space-y-4">
-      <h2 class="text-xl font-bold">Nueva Recepción</h2>
-      <label class="block">Solicitud asociada (ID)
-        <input v-model.number="form.requestId" type="number" class="input input-bordered w-full" required min="1" />
-      </label>
-      <label class="block">Hora inicio
-        <input v-model="form.startTime" type="datetime-local" class="input input-bordered w-full" required />
-      </label>
-      <label class="block">Hora fin
-        <input v-model="form.endTime" type="datetime-local" class="input input-bordered w-full" required />
-      </label>
-      <label class="block">Estado
-        <input v-model="form.status" class="input input-bordered w-full" required />
-      </label>
-      <label class="block">Notas
-        <textarea v-model="form.notes" class="textarea textarea-bordered w-full" />
-      </label>
-      <label class="block">Responsable check-in
-        <input v-model="form.checkinResponsible" class="input input-bordered w-full" required />
-      </label>
-      <div class="flex gap-2 justify-end">
-        <button type="button" class="btn" @click="store.showCreate = false">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+  <div v-if="store.showCreate" class="fixed inset-0 modal-overlay flex items-center justify-center z-50 animate-fade-in-up">
+    <form @submit.prevent="onSubmit" class="glass-modal p-8 rounded-2xl shadow-strong w-full max-w-lg space-y-6">
+      <h2 class="heading-secondary text-center text-unas-emerald-700">Nueva Recepción</h2>
+      
+      <div class="space-y-5">
+        <div>
+          <label class="block text-muted mb-2 font-medium">Solicitud asociada (ID)</label>
+          <input 
+            v-model.number="form.requestId" 
+            type="number" 
+            class="input-unas" 
+            required 
+            min="1" 
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-muted mb-2 font-medium">Hora inicio</label>
+            <input 
+              v-model="form.startTime" 
+              type="datetime-local" 
+              class="input-unas" 
+              required 
+            />
+          </div>
+          
+          <div>
+            <label class="block text-muted mb-2 font-medium">Hora fin</label>
+            <input 
+              v-model="form.endTime" 
+              type="datetime-local" 
+              class="input-unas" 
+              required 
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-muted mb-2 font-medium">Estado</label>
+          <select v-model="form.status" class="input-unas" required>
+            <option value="">Seleccione estado</option>
+            <option value="pending">Pendiente</option>
+            <option value="completed">Completado</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-muted mb-2 font-medium">Notas</label>
+          <textarea 
+            v-model="form.notes" 
+            class="textarea-unas" 
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-muted mb-2 font-medium">Responsable check-in</label>
+          <input 
+            v-model="form.checkinResponsible" 
+            class="input-unas" 
+            required 
+          />
+        </div>
+      </div>
+
+      <div class="flex-between pt-4">
+        <button 
+          type="button" 
+          class="btn-secondary-unas hover-lift"
+          @click="store.showCreate = false"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn-primary-unas hover-lift"
+        >
+          Guardar Recepción
+        </button>
       </div>
     </form>
   </div>
@@ -31,6 +88,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue';
 import { useReceptionsStore } from '../Store/receptionsStore';
+
 export default defineComponent({
   setup() {
     const store = useReceptionsStore();
@@ -42,12 +100,42 @@ export default defineComponent({
       notes: '',
       checkinResponsible: '',
     });
+
     async function onSubmit() {
       await store.create(form);
       store.showCreate = false;
-      Object.assign(form, { requestId: 0, startTime: '', endTime: '', status: '', notes: '', checkinResponsible: '' });
+      Object.assign(form, { 
+        requestId: 0, 
+        startTime: '', 
+        endTime: '', 
+        status: '', 
+        notes: '', 
+        checkinResponsible: '' 
+      });
     }
+
     return { store, form, onSubmit };
   }
 });
 </script>
+
+<style scoped>
+/* Estilos específicos del componente si son necesarios */
+.modal-overlay {
+  backdrop-filter: blur(4px);
+}
+
+.glass-modal {
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+/* Ajustes para inputs de tipo datetime-local */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(0.3);
+}
+</style>
